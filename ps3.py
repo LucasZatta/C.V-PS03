@@ -5,7 +5,7 @@ import math
 import cv2
 
 
-archive_name="gummy.jpg"
+archive_name="Input/gummy.jpg"
 #Loading the image and making it a grey level one
 image = cv2.imread(archive_name)
 grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -39,36 +39,37 @@ for c in cnts:
 		#Find the moments
 		M = cv2.moments(c)
 
-		#Find the center of mass
-		cx = int(M['m10']/M['m00'])
-		cy = int(M['m01']/M['m00'])
+		if(M['m00']) != 0:
+			#Find the center of mass
+			cx = int(M['m10']/M['m00'])
+			cy = int(M['m01']/M['m00'])
 
-		#Find the direction
-		rows,cols = image.shape[:2]
-		[vx,vy,x,y] = cv2.fitLine(c, cv2.DIST_L2,0,0.01,0.01)
+			#Find the direction
+			rows,cols = image.shape[:2]
+			[vx,vy,x,y] = cv2.fitLine(c, cv2.DIST_L2,0,0.01,0.01)
 
-		#Find a bounding rectangle (auxiliar step to make it easir to draw the line)
-		u,v,w,h = cv2.boundingRect(c)
+			#Find a bounding rectangle (auxiliar step to make it easir to draw the line)
+			u,v,w,h = cv2.boundingRect(c)
 
-		#Define the line cordinates
-		line_x1 = int(x + radius*(vx)*1.1)
-		line_y1 = int(y + radius*(vy)*1.1)
+			#Define the line cordinates
+			line_x1 = int(x + radius*(vx)*1.1)
+			line_y1 = int(y + radius*(vy)*1.1)
 
-		line_x2 = int(x - radius*(vx)*1.1)
-		line_y2 = int(y - radius*(vy)*1.1)
+			line_x2 = int(x - radius*(vx)*1.1)
+			line_y2 = int(y - radius*(vy)*1.1)
 
-		#Find the ellipse (eccentricity)
-		ellipse = cv2.fitEllipse(c)
-		
-		#Draw it all in the image
-		cv2.ellipse(image,ellipse,(125,255,0),2)
-		cv2.line(image,(line_x1,line_y1),(line_x2,line_y2),(70,125,180),2)
-		cv2.circle(image,(cx, cy), 5, (255,0,0), -1)
+			#Find the ellipse (eccentricity)
+			ellipse = cv2.fitEllipse(c)
+			
+			#Draw it all in the image
+			cv2.ellipse(image,ellipse,(125,255,0),2)
+			cv2.line(image,(line_x1,line_y1),(line_x2,line_y2),(70,125,180),2)
+			cv2.circle(image,(cx, cy), 5, (255,0,0), -1)
 
-		#Show it all on screen
-		cv2.imshow("Original Image", image)
-		cv2.imshow("Tresh Image", thresh)
-		cv2.waitKey(0)
+			#Show it all on screen
+			cv2.imshow("Original Image", image)
+			cv2.imshow("Tresh Image", thresh)
+			cv2.waitKey(0)
 
 
 cv2.destroyAllWindows()

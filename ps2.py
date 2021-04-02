@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 import math
 import cv2
 
-archive_name = "gummy.jpg"
+archive_name = "Input/k.jpg"
 
 #Loading the image and making it a grey level one
 image = cv2.imread(archive_name)
